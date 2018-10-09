@@ -1,5 +1,7 @@
 use ad_lister_db;
 
+--### 5 tables created, 3 primary key, 2 relational ###--
+
 CREATE TABLE users (
     id INT UNSIGNED NOT NULL AUTO_INCREMENT,
     user_id INT UNSIGNED UNIQUE,
@@ -46,7 +48,8 @@ CREATE TABLE ad_authors (
 describe ad_authors;
 
 
--- data seeder
+
+-- ### SEED DATA ### --
  INSERT INTO users (user_id, email)
  VALUES (1001, 'jim@example.com'),
  (1002, 'jon@example.com'),
@@ -81,24 +84,27 @@ describe ad_authors;
  (2005, 1001);
 
 
+-- ### QUERY FUNCTIONS ### --
+
 -- Given ad, get user's email address
 SELECT email, ad_code from users u
 JOIN ad_authors aa on u.user_id = aa.user_id where ad_code = 2001;
+
 
 -- Given ad, get categories to which it belongs
 select ad_code from ad_categories ac
 JOIN categories c on c.cat_code = ac.cat_code
 where c.descriptor = 'events';
 
+
 -- Given category, show ad reference #
-select c.descriptor, a.ad_code from ads a
+select a.ad_code, c.descriptor from ads a
 JOIN ad_categories ac on ac.ad_code = a.ad_code
 JOIN categories c on c.cat_code = ac.cat_code
 where ac.cat_code = 104;
 
 
 -- Given user show ads posted
-
 select u.email, a.ad_code from ads a
 JOIN ad_authors aa ON aa.ad_code = a.ad_code
 JOIN users u ON u.user_id = aa.user_id
